@@ -1,19 +1,3 @@
-
-## **Visão Geral**
-### **gprc-app-cs-plugin**
-
-O **gprc-app-cs-plugin** adiciona em uma stack a capacidade de expor serviços `gRPC` e suas configurações, bem como provê a criação de um `gRPC Client` que permite a distribuição e consumo desse serviço em outras aplicações.
-## **Uso**
-
-### **Pré-requisitos**
-Para utilizar esse plugin é necessário ter uma stack dotnet criada pelo CLI do StackSpot que você pode baixar [**aqui**](https://stackspot.com.br/).
-
-Ter instalado:
-- .NET 5 ou 6 
-- O template `rest-app-cs-template` já deverá estar aplicado para você conseguir utilizar este plugin.
-
-## **Configuração**
-
 #### **Inputs**
 
 Os inputs necessários para utilizar o plugin são:
@@ -158,6 +142,3 @@ Ele vem pré-configurado para que você possa, por exemplo, empacotar com o nuge
 #### **Ambiente local**
 
 Também como configuração adicional foi exposta nos arquivos `Dockerfile`e `docker-compose.yml` a porta para o serviço gRPC informada nos `Inputs`.
-
-### **Exemplo de uso**
-- [**Nuget**](https://www.nuget.org/packages/StackSpot.Grpc/)
