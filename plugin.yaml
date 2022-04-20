@@ -127,12 +127,12 @@ hooks:
     trigger: after-render
     working-dir: src/{{project_name}}.Application 
     commands:
-      -  dotnet dotnet-format --include-generated --include Common/StackSpot/DependencyInjection.cs SayHellogRPC/*.cs
+      -  dotnet dotnet-format --include-generated --include Common/StackSpot/DependencyInjection.cs
   - type: run
     trigger: after-render
     working-dir: src/{{project_name}}.{{project_type}}
     commands:
-      -  dotnet dotnet-format --include-generated --include Program.cs Services/*.cs
+      -  dotnet dotnet-format --include-generated --include Program.cs
 #solution
   - type: run
     trigger: after-render
