@@ -1,8 +1,0 @@
-{% if global_inputs.framework == 'net5.0' %}        
-app.UseGrpc(env, typeof(Startup).Assembly, env.ContentRootPath);
-{% else %}
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapGrpcService<SayHelloService>();
-});
-{% endif %}

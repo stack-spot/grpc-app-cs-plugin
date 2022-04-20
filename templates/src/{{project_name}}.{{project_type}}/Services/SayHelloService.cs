@@ -1,27 +1,34 @@
+{% if global_inputs.framework == 'net5.0' %}
 using System.Threading.Tasks;
-using Grpc.Core;
 using MediatR;
 using Microsoft.Extensions.Logging;
+{% endif %}using Grpc.Core;
 using {{project_name}}.Application.SayHelloGrpc;
 
+{% if global_inputs.framework == 'net5.0' %}
 namespace {{project_name}}.{{project_type}}.Services
 {
-    public class SayHelloService : Greeter.GreeterBase
+{% else %}
+namespace {{project_name}}.{{project_type}}.Services;{% endif %}
+
+public class SayHelloService : Greeter.GreeterBase
+{
+    private readonly IMediator _mediator;
+    private readonly ILogger<SayHelloService> _logger;
+
+    public SayHelloService(IMediator mediator, ILogger<SayHelloService> logger)
     {
-        private readonly IMediator _mediator;
-        private readonly ILogger<SayHelloService> _logger;
+        _mediator = mediator;
+        _logger = logger;
+    }
 
-        public SayHelloService(IMediator mediator, ILogger<SayHelloService> logger)
-        {
-            _mediator = mediator;
-            _logger = logger;
-        }
+    public override async Task<HelloReply> SayHello(HelloRequest request, ServerCallContext context)
+    {
+        _logger.LogInformation("Start Process", request);
 
-        public override async Task<HelloReply> SayHello(HelloRequest request, ServerCallContext context)
-        {
-            _logger.LogInformation("Start Process", request);
-
-            return await _mediator.Send(new SayHelloCommand(request));
-        }
+        return await _mediator.Send(new SayHelloCommand(request));
     }
 }
+{% if global_inputs.framework == 'net5.0' %}
+}
+{% endif %}

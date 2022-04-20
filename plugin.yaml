@@ -35,18 +35,19 @@ hooks:
           insert-before:
             value: "using StackSpot.Grpc;"
           when:
-            not-exists: "using StackSpot.Grpc;"            
+            not-exists: "using StackSpot.Grpc;"      
+      - search:
+          string: "using"
+          insert-before:
+            value: "using System.IO; "
+          when:
+            not-exists: "using System.IO;"           
       - search:
           string: "return services"
           insert-before:
             snippet: snippets/src/Application/services.txt
           when:
             not-exists: "services.AddGrpcServer();"
-#startup
-  - type: edit
-    trigger: before-render
-    path: "src/{{project_name}}.{{project_type}}/{{computed_inputs.file}}"
-    changes:
       - search:
           string: "using"
           insert-before:
@@ -56,21 +57,15 @@ hooks:
       - search:
           string: "using"
           insert-before:
-            value: using {{project_name}}.{{project_type}}.Services;
+            value: "using System.Reflection;"
           when:
-            not-exists: "using {{project_name}}.{{project_type}}.Services;"
+            not-exists: "using System.Reflection"
       - search:
-          string: "app.UseStackSpot"
-          insert-after:
-            snippet: snippets/src/{{project_type}}/app.txt
+          string: "return app"
+          insert-before:
+            snippet: snippets/src/Application/app.txt
           when:
-            not-exists: "app.UseGrpc(env, typeof(Startup).Assembly, env.ContentRootPath);"
-      - search:
-          string: "app.UseStackSpot"
-          insert-after:
-            snippet: snippets/src/{{project_type}}/app.txt
-          when:
-            not-exists: "app.UseEndpoints"
+            not-exists: "app.UseGrpc"
 #program
   - type: edit
     trigger: before-render
@@ -130,14 +125,14 @@ hooks:
 #format
   - type: run
     trigger: after-render
-    working-dir: src/{{project_name}}.Application
+    working-dir: src/{{project_name}}.Application 
     commands:
-      -  dotnet dotnet-format --include-generated
+      -  dotnet dotnet-format --include-generated --include Common/StackSpot/DependencyInjection.cs SayHellogRPC/*.cs
   - type: run
     trigger: after-render
     working-dir: src/{{project_name}}.{{project_type}}
     commands:
-      -  dotnet dotnet-format --include-generated
+      -  dotnet dotnet-format --include-generated --include Program.cs Services/*.cs
 #solution
   - type: run
     trigger: after-render
