@@ -21,20 +21,20 @@ Os inputs necessários para utilizar o plugin são:
 | :--- | :--- | :--- |
 | gPRC Port | ex.: 50051 |  Porta em que será exposta a comunicação gRPC |
 
-#### **Configurações .net5.0**
-Adicione ao seu `IServiceCollection` via `services.AddGrpcServer();` no arquivo `Startup`. 
+#### **Configurações**
+Adicione ao seu `IServiceCollection` via `services.AddGrpcServer();` no arquivo `Startup` ou `Program`. 
 
 ```csharp
 services.AddGrpcServer();
 ```
 
-Adicione ao seu `IApplicationBuilder` via `app.UseGrpc` no `Startup`. 
+Adicione ao seu `IApplicationBuilder` via `app.UseGrpc` no `Startup` ou `Program`. 
 
 ```csharp
-app.UseGrpc(env, typeof(Startup).Assembly, env.ContentRootPath);
+app.UseGrpc(environment, Assembly.GetEntryAssembly(), Path.Combine(Directory.GetParent(environment.ContentRootPath).FullName, "Protos"));
+
 ```
 
-#### **Configurações .net6.0**
 Adicione às configurações de portas do seu `WebHost` via `builder.WebHost.ConfigureKestrel` no arquivo `Program`. 
 
 ```csharp
@@ -48,17 +48,10 @@ builder.WebHost.ConfigureKestrel((context, options) =>
     {
         listenOptions.Protocols = HttpProtocols.Http2;
     });
+    options.ListenLocalhost(5005, o => o.Protocols = HttpProtocols.Http2); 
 });
 ```
 
-Adicione ao seu `IApplicationBuilder` via `app.UseEndpoints` para mapear seus `Services` na `Program`. 
-
-```csharp
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapGrpcService<SayHelloService>();
-});
-```
 #### **Implementação**
 
 O **gprc-app-cs-plugin** adiciona à sua stack alguns arquivos que auxiliam com um exemplo completo de implementação de um Server e de um Client gRPC.
@@ -158,6 +151,7 @@ Ele vem pré-configurado para que você possa, por exemplo, empacotar com o nuge
 #### **Ambiente local**
 
 Também como configuração adicional foi exposta nos arquivos `Dockerfile`e `docker-compose.yml` a porta para o serviço gRPC informada nos `Inputs`.
+
 
 ### **Exemplo de uso**
 - [**Nuget**](https://www.nuget.org/packages/StackSpot.Grpc/)
