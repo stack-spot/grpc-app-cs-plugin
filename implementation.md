@@ -6,20 +6,20 @@ Os inputs necessários para utilizar o plugin são:
 | gPRC Port | ex.: 50051 |  Porta em que será exposta a comunicação gRPC |
 
 #### **Configurações**
-Adicione ao seu `IServiceCollection` via `services.AddGrpcServer();` no arquivo `Startup` ou `Program`. 
+Adicione ao seu `IServiceCollection` via `services.AddGrpcServer();` no arquivo `Startup` ou `Program`, a seguinte configuração:    
 
 ```csharp
 services.AddGrpcServer();
 ```
 
-Adicione ao seu `IApplicationBuilder` via `app.UseGrpc` no `Startup` ou `Program`. 
+Adicione ao seu `IApplicationBuilder,` via `app.UseGrpc`, no `Startup` ou `Program`, a seguinte configuração:  
 
 ```csharp
 app.UseGrpc(environment, Assembly.GetEntryAssembly(), Path.Combine(Directory.GetParent(environment.ContentRootPath).FullName, "Protos"));
 
 ```
 
-Adicione às configurações de portas do seu `WebHost` via `builder.WebHost.ConfigureKestrel` no arquivo `Program`. 
+Adicione às configurações de portas do seu `WebHost`, via `builder.WebHost.ConfigureKestrel`, no arquivo `Program`:   
 
 ```csharp
 builder.WebHost.ConfigureKestrel((context, options) =>
@@ -38,12 +38,13 @@ builder.WebHost.ConfigureKestrel((context, options) =>
 
 #### **Implementação**
 
-O **gprc-app-cs-plugin** adiciona à sua stack alguns arquivos que auxiliam com um exemplo completo de implementação de um Server e de um Client gRPC.
+O plugin **`gprc-app-cs-plugin`** adiciona à sua stack alguns arquivos que auxiliam com um exemplo completo de implementação de um Server e de um Client gRPC.
 
 #### ***Arquivo Proto***
 
 O arquivo `.proto` possui as definições dos serviços e mensagens que serão utilizadas na comunicação.
-Com as configurações de gRPC ativadas em seu projeto, ao Compilar sua aplicação serão criados arquivos no projeto `MyApp.Application\Base` com as classes geradas pelo plugin de gRPC. No nosso exemplo os arquivos são: `Greet.cs` e `GreetGrpc.cs`.
+
+Com as configurações de gRPC ativadas em seu projeto, ao compilar a sua aplicação serão criados arquivos no projeto `MyApp.Application\Base` com as classes geradas pelo plugin de gRPC. No exemplo os arquivos são: **`Greet.cs`** e **`GreetGrpc.cs`**:  
 
 ```proto
 syntax = "proto3";
@@ -67,8 +68,9 @@ message HelloReply {
 
 #### ***Service***
 
-No projeto `Api` foi adicionado o arquivo `SayHelloService` que define o endpoint que será utilizado para receber as requisições.
-Importante notar que essa classe herda da classe `Greeter.GreeterBase` que foi gerada a automaticamente a partir do arquivo .proto e compilação da solução.
+No projeto `Api` foi adicionado o arquivo `SayHelloService`, que define o endpoint que será utilizado para receber as requisições.
+
+É importante notar que esta classe herda da classe `Greeter.GreeterBase`, que foi gerada a automaticamente a partir do arquivo `.proto` e compilado da solução.
 
 ```csharp
 public class SayHelloService : Greeter.GreeterBase
@@ -91,7 +93,7 @@ public class SayHelloService : Greeter.GreeterBase
     }
 ```
 
-Adicionalmente no projeto `Application` foram criadas classes `Command` e `Handler` seguindo o padrão inicial do template com Clean Architeture.
+Adicionalmente, no projeto `Application`, foram criadas classes `Command` e `Handler` seguindo o padrão inicial do template com Clean Architeture. Confira:  
 
 ```csharp
     public class SayHelloCommand : IRequest<HelloReply>
@@ -129,9 +131,10 @@ Adicionalmente no projeto `Application` foram criadas classes `Command` e `Handl
 
 #### ***Client***
 
-Um projeto `*.GrpcClient.csproj` é adicionado à sua solução e ao realizar a compilação do seu projeto, este irá criar as classes `Greet.cs` e `GreetGrpc.cs` com as implementações para aplicações clientes que irão lançar requisições para o seu endpoint gRPC.
-Ele vem pré-configurado para que você possa, por exemplo, empacotar com o nuget e distribuir para quem quiser utilizar.
+Um projeto `*.GrpcClient.csproj` é adicionado à sua solução e ao realizar a compilação do seu projeto, ele criará as classes `Greet.cs` e `GreetGrpc.cs` com as implementações para aplicações clientes. 
+
+Elas irão lançar requisições para o seu endpoint **gRPC**. O projeto vem pré-configurado para que você possa, por exemplo, empacotar com o nuget e distribuir para quem quiser utilizar.
 
 #### **Ambiente local**
 
-Também como configuração adicional foi exposta nos arquivos `Dockerfile`e `docker-compose.yml` a porta para o serviço gRPC informada nos `Inputs`.
+Também como configuração adicional, a porta para o serviço gRPC informada nos `Inputs` foi exposta nos arquivos `Dockerfile`e `docker-compose.yml`.
